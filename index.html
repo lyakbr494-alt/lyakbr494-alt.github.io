@@ -1,10 +1,58 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Site</title>
+<meta charset="UTF-8">
+<title>Flappy Bird Pro</title>
+<style>
+  body{
+    margin:0;
+    background:#70c5ce;
+    overflow:hidden;
+    font-family:Arial;
+    text-align:center;
+  }
+  canvas{
+    display:block;
+    margin:auto;
+    background:#70c5ce;
+  }
+  #restartBtn{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    padding:15px 25px;
+    font-size:20px;
+    display:none;
+    border:none;
+    border-radius:10px;
+    background:#ff4757;
+    color:white;
+    cursor:pointer;
+  }
+</style>
 </head>
 <body>
-  <h1>هلا هذا موقعي 🔥</h1>
-  <p>اشتغل بنجاح!</p>
-</body>
-</html>
+
+<canvas id="game" width="400" height="600"></canvas>
+<button id="restartBtn">إعادة اللعب</button>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+const restartBtn = document.getElementById("restartBtn");
+
+let bird, pipes, frame, score, gameOver;
+
+const jumpSound = new Audio("https://www.soundjay.com/buttons/sounds/button-16.mp3");
+
+function startGame(){
+  bird = {
+    x: 80,
+    y: 200,
+    width: 30,
+    height: 30,
+    gravity: 0.5,
+    lift: -8,
+    velocity:
