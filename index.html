@@ -55,4 +55,79 @@ function startGame(){
     height: 30,
     gravity: 0.5,
     lift: -8,
-    velocity:
+    velocity:velocity: 0
+};
+
+pipes = [];
+frame = 0;
+score = 0;
+gameOver = false;
+restartBtn.style.display = "none";
+
+document.addEventListener("click", () => {
+    bird.velocity = bird.lift;
+    jumpSound.play();
+});
+
+loop();
+}
+
+function loop() {
+    if (gameOver) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    bird.velocity += bird.gravity;
+    bird.y += bird.velocity;
+
+    if (frame % 90 === 0) {
+        let gap = 120;
+        let top = Math.random() * (canvas.height - gap);
+        pipes.push({
+            x: canvas.width,
+            top: top,
+            bottom: top + gap
+        });
+    }
+
+    pipes.forEach(pipe => {
+        pipe.x -= 2;
+
+        ctx.fillStyle = "green";
+        ctx.fillRect(pipe.x, 0, 40, pipe.top);
+        ctx.fillRect(pipe.x, pipe.bottom, 40, canvas.height);
+
+        if (
+            bird.x < pipe.x + 40 &&
+            bird.x + bird.width > pipe.x &&
+            (bird.y < pipe.top || bird.y + bird.height > pipe.bottom)
+        ) {
+            gameOver = true;
+            restartBtn.style.display = "block";
+        }
+
+        if (pipe.x === bird.x) score++;
+    });
+
+    ctx.fillStyle = "yellow";
+    ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
+
+    if (bird.y + bird.height > canvas.height || bird.y < 0) {
+        gameOver = true;
+        restartBtn.style.display = "block";
+    }
+
+    ctx.fillStyle = "white";
+    ctx.font = "20px Arial";
+    ctx.fillText("Score: " + score, 10, 25);
+
+    frame++;
+    requestAnimationFrame(loop);
+}
+
+restartBtn.onclick = startGame;
+
+startGame();
+</script>
+</body>
+</html>
